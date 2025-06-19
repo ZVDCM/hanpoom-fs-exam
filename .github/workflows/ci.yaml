@@ -9,8 +9,8 @@ jobs:
         name: Build and Test
         runs-on: ubuntu-latest
         env:
-            TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-            TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+            TURBO_TOKEN: ${{ secrets.HANPOOM_FS_EXAM }}
+            TURBO_TEAM: ${{ vars.HANPOOM }}
         steps:
             - name: Check out code
               uses: actions/checkout@v4
