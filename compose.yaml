@@ -8,15 +8,6 @@ services:
             dockerfile: ./apps/web/Dockerfile
         ports:
             - 3000:3000
-        develop:
-            watch:
-                - path: './apps/web/package.json'
-                  action: rebuild
-                - path: './apps/web/package-lock.json'
-                  action: rebuild
-                - path: './apps/web'
-                  target: '/app'
-                  action: 'sync'
     api:
         depends_on:
             - db
@@ -26,15 +17,6 @@ services:
             dockerfile: ./apps/api/Dockerfile
         ports:
             - 3001:3001
-        develop:
-            watch:
-                - path: './apps/api/package.json'
-                  action: rebuild
-                - path: './apps/api/package-lock.json'
-                  action: rebuild
-                - path: './apps/api'
-                  target: '/app'
-                  action: 'sync'
     db:
         image: postgres
         restart: always
