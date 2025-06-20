@@ -25,6 +25,8 @@ services:
             POSTGRES_DB: hanpoom
             POSTGRES_USER: root
             POSTGRES_PASSWORD: root123
+        ports:
+            - 5432:5432
 
     adminer:
         image: adminer
