@@ -1,29 +1,13 @@
-import {
-    Controller,
-    HttpStatus,
-    ParseFilePipeBuilder,
-    Post,
-    UploadedFile,
-    UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { csvFilePipeBuilder } from 'src/utils/parse-file-pipe-builders';
 
 @Controller('picking-slips')
 export class PickingSlipsController {
     @Post('import')
     @UseInterceptors(FileInterceptor('file'))
     importCSV(
-        @UploadedFile(
-            new ParseFilePipeBuilder()
-                .addFileTypeValidator({
-                    fileType: 'text/csv',
-                    skipMagicNumbersValidation: true,
-                    fallbackToMimetype: true,
-                })
-                .build({
-                    errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-                }),
-        )
+        @UploadedFile(csvFilePipeBuilder)
         file: Express.Multer.File,
     ): string {
         if (!file) {
