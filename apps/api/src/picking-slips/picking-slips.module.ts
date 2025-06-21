@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { DatabaseModule } from 'src/database/database.module';
 import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-    imports: [CqrsModule],
+    imports: [DatabaseModule, CqrsModule],
 })
 export class PickingSlipsModule {}
