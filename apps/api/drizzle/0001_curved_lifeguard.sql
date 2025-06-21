@@ -1,0 +1,1 @@
+ALTER TABLE "picking_slip_items" ALTER COLUMN "quantity" DROP NOT NULL;

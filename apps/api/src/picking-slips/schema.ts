@@ -64,7 +64,7 @@ export const pickingSlipItems = pgTable('picking_slip_items', {
     itemId: bigint('item_id', { mode: 'bigint' }).notNull(),
     stockId: bigint('stock_id', { mode: 'bigint' }),
     orderFulfillmentProductId: bigint('order_fulfillment_product_id', { mode: 'bigint' }).notNull(),
-    quantity: smallintUnsigned('quantity').notNull(),
+    quantity: smallintUnsigned('quantity'),
     refundedQuantity: smallintUnsigned('refunded_quantity').notNull().default(0),
     locationId: bigint('location_id', { mode: 'bigint' }),
     locationCode: varchar('location_code', { length: 20 }),
