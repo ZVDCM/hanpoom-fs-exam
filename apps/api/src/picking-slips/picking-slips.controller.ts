@@ -1,4 +1,4 @@
-import { Controller, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImportCSVCommand } from 'src/picking-slips/commands/import-csv/import-csv.command';
@@ -17,10 +17,10 @@ type PickingSlipEntity = `${Base}s` | `${Base}-${Variant}`;
 export class PickingSlipsController {
     constructor(private readonly commandBus: CommandBus) {}
 
-    @Post('import')
+    @Post('import/:variant')
     @UseInterceptors(FileInterceptor('file'))
     async importCSV(
-        @Query('variant') variant: PickingSlipEntity,
+        @Param('variant') variant: PickingSlipEntity,
         @UploadedFile(csvFilePipeBuilder)
         file: Express.Multer.File,
     ): Promise<string> {
