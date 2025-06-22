@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Param,
+    Post,
+    Query,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PaginatedResponse } from '@repo/types';
@@ -11,6 +20,7 @@ import { PickingSlipItem } from 'src/picking-slips/domain/picking-slip-item';
 import { QueryDto } from 'src/picking-slips/dto/query.dto';
 import { GetPickingSlipsQuery } from 'src/picking-slips/queries/get-picking-slips/get-picking-slips.query';
 import { csvFilePipeBuilder } from 'src/utils/parse-file-pipe-builders';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 type Base = 'slip';
 type Variant = 'items' | 'dates';
@@ -24,6 +34,7 @@ export class PickingSlipsController {
         private readonly queryBus: QueryBus,
     ) {}
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     async getAll(@Query() queryDto: QueryDto): Promise<PaginatedResponse<PickingSlipType>> {
         const results = this.queryBus.execute(
