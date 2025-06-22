@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
     imports: [
@@ -20,6 +21,14 @@ import { ZodValidationPipe } from 'nestjs-zod';
         DatabaseModule,
         PickingSlipsModule,
         AuthModule,
+        ThrottlerModule.forRoot({
+            throttlers: [
+                {
+                    ttl: 60000,
+                    limit: 10,
+                },
+            ],
+        }),
     ],
     providers: [
         {
