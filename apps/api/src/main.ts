@@ -1,7 +1,6 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from 'src/all-exceptions.filter';
-import { SnakeCaseInterceptor } from 'src/snake-case.interceptor';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -23,8 +22,6 @@ async function bootstrap() {
 
     const { httpAdapter } = app.get(HttpAdapterHost);
     app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
-
-    app.useGlobalInterceptors(new SnakeCaseInterceptor());
 
     app.enableCors({
         origin: process.env.FRONTEND_URL,

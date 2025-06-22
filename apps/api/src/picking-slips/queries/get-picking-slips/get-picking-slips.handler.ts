@@ -8,6 +8,7 @@ import { GetPickingSlipsQuery } from 'src/picking-slips/queries/get-picking-slip
 import * as schema from 'src/picking-slips/schema';
 import { checkForErrors } from 'src/utils/check-for-errors';
 import { getValues } from 'src/utils/get-values';
+import { toSnakeCase } from 'src/utils/to-snake-case';
 
 @QueryHandler(GetPickingSlipsQuery)
 export class GetPickingSlipsHandler implements IQueryHandler<GetPickingSlipsQuery> {
@@ -105,7 +106,7 @@ export class GetPickingSlipsHandler implements IQueryHandler<GetPickingSlipsQuer
         );
 
         return {
-            data,
+            data: toSnakeCase(data),
             total: count,
             page,
             pageSize,

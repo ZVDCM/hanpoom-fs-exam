@@ -4,7 +4,6 @@ import { DatabaseModule } from './database/database.module';
 import { validateEnv } from 'src/utils/validate-env';
 import { PickingSlipsModule } from './picking-slips/picking-slips.module';
 import { AllExceptionsFilter } from 'src/all-exceptions.filter';
-import { SnakeCaseInterceptor } from 'src/snake-case.interceptor';
 import { AuthModule } from './auth/auth.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { APP_PIPE } from '@nestjs/core';
@@ -36,7 +35,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
             useClass: ZodValidationPipe,
         },
         AllExceptionsFilter,
-        SnakeCaseInterceptor,
     ],
 })
 export class AppModule {}
