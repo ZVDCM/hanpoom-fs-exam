@@ -1,11 +1,24 @@
-import { Controller, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import {
+    Controller,
+    Get,
+    Param,
+    Post,
+    Query,
+    UploadedFile,
+    UseInterceptors,
+    UsePipes,
+} from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ZodValidationPipe } from 'nestjs-zod';
 import { ImportCSVCommand } from 'src/picking-slips/commands/import-csv/import-csv.command';
 import { ParseCSVCommand } from 'src/picking-slips/commands/parse-csv/parse-csv.command';
 import { PickingSlip } from 'src/picking-slips/domain/picking-slip';
 import { PickingSlipDate } from 'src/picking-slips/domain/picking-slip-date';
 import { PickingSlipItem } from 'src/picking-slips/domain/picking-slip-item';
+import { QueryDto } from 'src/picking-slips/dto/query.dto';
+import { GetPickingSlipsQuery } from 'src/picking-slips/queries/get-picking-slips/get-picking-slips.query';
+import { PickingSlipResponse } from 'src/types/picking-slip';
 import { csvFilePipeBuilder } from 'src/utils/parse-file-pipe-builders';
 
 type Base = 'slip';
@@ -15,7 +28,24 @@ type PickingSlipEntity = `${Base}s` | `${Base}-${Variant}`;
 
 @Controller('picking-slips')
 export class PickingSlipsController {
-    constructor(private readonly commandBus: CommandBus) {}
+    constructor(
+        private readonly commandBus: CommandBus,
+        private readonly queryBus: QueryBus,
+    ) {}
+
+    @UsePipes(ZodValidationPipe)
+    @Get()
+    async getAll(@Query() queryDto: QueryDto): Promise<PickingSlipResponse[]> {
+        const results = this.queryBus.execute(
+            new GetPickingSlipsQuery(
+                queryDto.status,
+                queryDto.sort,
+                queryDto.page,
+                queryDto.pageSize,
+            ),
+        );
+        return results;
+    }
 
     @Post('import/:variant')
     @UseInterceptors(FileInterceptor('file'))

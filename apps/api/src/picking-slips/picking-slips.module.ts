@@ -7,6 +7,7 @@ import { ParseCSVHandler } from 'src/picking-slips/commands/parse-csv/parse-csv.
 import { ImportCSVHandler } from 'src/picking-slips/commands/import-csv/import-csv.handler';
 import { PickingSlipDatesRepository } from 'src/picking-slips/repositories/picking-slip-dates.repository';
 import { PickingSlipItemsRepository } from 'src/picking-slips/repositories/picking-slip-items.repository';
+import { GetPickingSlipsHandler } from 'src/picking-slips/queries/get-picking-slips/get-picking-slips.handler';
 
 @Module({
     imports: [DatabaseModule, CqrsModule],
@@ -17,6 +18,7 @@ import { PickingSlipItemsRepository } from 'src/picking-slips/repositories/picki
         PickingSlipItemsRepository,
         ParseCSVHandler,
         ImportCSVHandler,
+        GetPickingSlipsHandler,
     ],
 })
 export class PickingSlipsModule {}
