@@ -20,7 +20,6 @@ export const refreshTokens = pgTable('refresh_tokens', {
 
 export const blacklistedAccessTokens = pgTable('blacklisted_access_tokens', {
     id: uuid('id').$type<BlacklistedAccessTokenId>().defaultRandom().primaryKey(),
-    userId: uuid('user_id').$type<UserId>().notNull(),
     tokenHash: varchar('token_hash', { length: 255 }).notNull().unique(),
     createdAt: timestamp('created_at').defaultNow(),
     updatedAt: timestamp('updated_at').defaultNow(),

@@ -1,0 +1,1 @@
+ALTER TABLE "blacklisted_access_tokens" DROP COLUMN "user_id";

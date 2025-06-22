@@ -8,7 +8,7 @@ export class BlacklistAccessTokenHandler implements ICommandHandler<BlacklistAcc
         private readonly blacklistedAccessTokenRepository: BlacklistedAccessTokenRepository,
     ) {}
 
-    async execute({ user, token }: BlacklistAccessTokenCommand): Promise<void> {
-        await this.blacklistedAccessTokenRepository.create(user.id, token);
+    async execute({ token }: BlacklistAccessTokenCommand): Promise<void> {
+        await this.blacklistedAccessTokenRepository.create(token);
     }
 }

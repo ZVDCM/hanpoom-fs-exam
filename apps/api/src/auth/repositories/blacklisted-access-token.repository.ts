@@ -3,7 +3,6 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database.module';
 import * as schema from 'src/auth/schema';
 import { eq } from 'drizzle-orm';
-import { UserId } from '@repo/types';
 import { BlacklistedAccessTokenFactory } from 'src/auth/domain/blacklisted-token-domain/blacklisted-access-token.factory';
 import { BlacklistedAccessToken } from 'src/auth/domain/blacklisted-token-domain/blacklisted-access-token';
 import { hashToken } from 'src/utils/hash-token';
@@ -26,8 +25,8 @@ export class BlacklistedAccessTokenRepository {
 
         return blacklistedAccessToken;
     }
-    async create(userId: UserId, token: string) {
-        const newBlacklistedAccessToken = await BlacklistedAccessToken.create(userId, token);
+    async create(token: string) {
+        const newBlacklistedAccessToken = await BlacklistedAccessToken.create(token);
         await this.database
             .insert(schema.blacklistedAccessTokens)
             .values(newBlacklistedAccessToken.toObject())

@@ -58,10 +58,12 @@ export class AuthController {
         @Headers('authorization') authHeader: string,
         @Res({ passthrough: true }) res: Response,
     ) {
+        const { accessToken, refreshToken } = await this.commandBus.execute(new LoginCommand(user));
         const oldAccessToken = authHeader?.replace('Bearer ', '');
 
-        const { accessToken, refreshToken } = await this.commandBus.execute(new LoginCommand(user));
-        await this.commandBus.execute(new BlacklistAccessTokenCommand(user, oldAccessToken));
+        if (oldAccessToken) {
+            await this.commandBus.execute(new BlacklistAccessTokenCommand(oldAccessToken));
+        }
 
         res.cookie('auth', refreshToken, {
             httpOnly: true,
@@ -75,7 +77,13 @@ export class AuthController {
     }
 
     @Post('logout')
-    logout(@Res() res: Response) {
+    async logout(@Headers('authorization') authHeader: string, @Res() res: Response) {
+        const oldAccessToken = authHeader?.replace('Bearer ', '');
+
+        if (oldAccessToken) {
+            await this.commandBus.execute(new BlacklistAccessTokenCommand(oldAccessToken));
+        }
+
         res.clearCookie('auth', { path: '/auth/refresh' });
         res.status(200).json();
     }
