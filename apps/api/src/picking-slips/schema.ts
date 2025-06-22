@@ -18,22 +18,22 @@ export type PickingSlipItemId = number & { __brand: 'picking_slip_item_id' };
 export type PickingSlipDateId = number & { __brand: 'picking_slip_date_id' };
 
 export const pickingSlips = pgTable('picking_slips', {
-    id: bigint('id', { mode: 'bigint' })
+    id: bigint('id', { mode: 'number' })
         .$type<PickingSlipId>()
         .primaryKey()
         .generatedAlwaysAsIdentity(),
-    orderId: bigint('order_id', { mode: 'bigint' }).notNull(),
-    orderFulfillmentOrderId: bigint('order_fulfillment_order_id', { mode: 'bigint' }).notNull(),
+    orderId: bigint('order_id', { mode: 'number' }).notNull(),
+    orderFulfillmentOrderId: bigint('order_fulfillment_order_id', { mode: 'number' }).notNull(),
     isContainedSingleProduct: intBool('is_contained_single_product').notNull().default(0),
     createdAt: timestamp('created_at').defaultNow(),
 });
 
 export const pickingSlipDates = pgTable('picking_slip_dates', {
-    id: bigint('id', { mode: 'bigint' })
+    id: bigint('id', { mode: 'number' })
         .$type<PickingSlipDateId>()
         .primaryKey()
         .generatedAlwaysAsIdentity(),
-    pickingSlipId: bigint('picking_slip_id', { mode: 'bigint' }).notNull().unique(),
+    pickingSlipId: bigint('picking_slip_id', { mode: 'number' }).notNull().unique(),
     printedUsername: varchar('printed_username', { length: 20 }),
     inspectedUsername: varchar('inspected_username', { length: 20 }),
     packedUsername: varchar('packed_username', { length: 20 }),
@@ -56,17 +56,17 @@ export const pickingSlipDates = pgTable('picking_slip_dates', {
 });
 
 export const pickingSlipItems = pgTable('picking_slip_items', {
-    id: bigint('id', { mode: 'bigint' })
+    id: bigint('id', { mode: 'number' })
         .$type<PickingSlipItemId>()
         .primaryKey()
         .generatedAlwaysAsIdentity(),
-    pickingSlipId: bigint('picking_slip_id', { mode: 'bigint' }).notNull(),
-    itemId: bigint('item_id', { mode: 'bigint' }).notNull(),
-    stockId: bigint('stock_id', { mode: 'bigint' }),
-    orderFulfillmentProductId: bigint('order_fulfillment_product_id', { mode: 'bigint' }).notNull(),
+    pickingSlipId: bigint('picking_slip_id', { mode: 'number' }).notNull(),
+    itemId: bigint('item_id', { mode: 'number' }).notNull(),
+    stockId: bigint('stock_id', { mode: 'number' }),
+    orderFulfillmentProductId: bigint('order_fulfillment_product_id', { mode: 'number' }).notNull(),
     quantity: smallintUnsigned('quantity'),
     refundedQuantity: smallintUnsigned('refunded_quantity').notNull().default(0),
-    locationId: bigint('location_id', { mode: 'bigint' }),
+    locationId: bigint('location_id', { mode: 'number' }),
     locationCode: varchar('location_code', { length: 20 }),
     isPreOrder: intBool('is_pre_order').default(0),
     isSalesOnly: intBool('is_sales_only').default(0),
