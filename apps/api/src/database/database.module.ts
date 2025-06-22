@@ -2,15 +2,15 @@ import { Module, Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import { Env } from 'src/utils/validate-env';
 import * as pickingSlipSchemas from '../picking-slips/schema';
+import * as userSchemas from '../auth/schema';
 
 export const DATABASE_CONNECTION = 'DATABASE_CONNECTION';
 
 const DATABASE_PROVIDER = {
     provide: DATABASE_CONNECTION,
     useFactory: async (configService: ConfigService) => {
-        const dbUrl = configService.get<Env['DB_URL']>('DB_URL');
+        const dbUrl = configService.get('DB_URL');
         const pool = new Pool({
             connectionString: dbUrl,
         });
@@ -18,6 +18,7 @@ const DATABASE_PROVIDER = {
             client: pool,
             schema: {
                 ...pickingSlipSchemas,
+                ...userSchemas,
             },
         });
     },

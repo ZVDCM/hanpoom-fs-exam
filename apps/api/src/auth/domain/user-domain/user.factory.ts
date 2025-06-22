@@ -1,5 +1,5 @@
 import { UserId } from '@repo/types';
-import { User } from 'src/auth/domain/user';
+import { User } from 'src/auth/domain/user-domain/user';
 
 export class UserFactory {
     static fromPersistence(raw: {

@@ -1,0 +1,1 @@
+ALTER TABLE "blacklisted_access_tokens" DROP CONSTRAINT "blacklisted_access_tokens_user_id_unique";

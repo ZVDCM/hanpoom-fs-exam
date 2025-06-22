@@ -1,0 +1,1 @@
+ALTER TABLE "blacklisted_access_tokens" RENAME COLUMN "token_hash" TO "token";

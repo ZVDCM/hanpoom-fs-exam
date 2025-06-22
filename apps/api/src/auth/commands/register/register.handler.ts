@@ -7,6 +7,6 @@ export class RegisterHandler implements ICommandHandler<RegisterCommand> {
     constructor(private readonly user: UserRepository) {}
 
     async execute({ email, password }: RegisterCommand) {
-        this.user.register(email, password);
+        await this.user.create(email, password);
     }
 }

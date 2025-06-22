@@ -1,0 +1,1 @@
+ALTER TABLE "blacklisted_access_tokens" ADD CONSTRAINT "blacklisted_access_tokens_token_unique" UNIQUE("token");
