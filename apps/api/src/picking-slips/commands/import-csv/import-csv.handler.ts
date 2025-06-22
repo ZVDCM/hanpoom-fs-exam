@@ -10,21 +10,21 @@ import { PickingSlipsRepository } from 'src/picking-slips/repositories/picking-s
 @CommandHandler(ImportCSVCommand)
 export class ImportCSVHandler<TEntity> implements ICommandHandler<ImportCSVCommand<TEntity>> {
     constructor(
-        private readonly pickingSlips: PickingSlipsRepository,
-        private readonly pickingSlipDates: PickingSlipDatesRepository,
-        private readonly pickingSlipItems: PickingSlipItemsRepository,
+        private readonly pickingSlipsRepository: PickingSlipsRepository,
+        private readonly pickingSlipDatesRepository: PickingSlipDatesRepository,
+        private readonly pickingSlipItemsRepository: PickingSlipItemsRepository,
     ) {}
 
     async execute({ results, EntityType }: ImportCSVCommand<TEntity>) {
         switch (EntityType) {
             case PickingSlip:
-                await this.pickingSlips.import(results as PickingSlip[]);
+                await this.pickingSlipsRepository.import(results as PickingSlip[]);
                 break;
             case PickingSlipDate:
-                await this.pickingSlipDates.import(results as PickingSlipDate[]);
+                await this.pickingSlipDatesRepository.import(results as PickingSlipDate[]);
                 break;
             case PickingSlipItem:
-                await this.pickingSlipItems.import(results as PickingSlipItem[]);
+                await this.pickingSlipItemsRepository.import(results as PickingSlipItem[]);
                 break;
             default:
                 throw new Error(`Unknown entity type: ${EntityType.name}`);
