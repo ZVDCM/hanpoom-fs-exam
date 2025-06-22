@@ -10,15 +10,16 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { PaginatedResponse } from '@repo/types';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { ImportCSVCommand } from 'src/picking-slips/commands/import-csv/import-csv.command';
 import { ParseCSVCommand } from 'src/picking-slips/commands/parse-csv/parse-csv.command';
 import { PickingSlip } from 'src/picking-slips/domain/picking-slip';
+import { PickingSlip as PickingSlipType } from '@repo/types';
 import { PickingSlipDate } from 'src/picking-slips/domain/picking-slip-date';
 import { PickingSlipItem } from 'src/picking-slips/domain/picking-slip-item';
 import { QueryDto } from 'src/picking-slips/dto/query.dto';
 import { GetPickingSlipsQuery } from 'src/picking-slips/queries/get-picking-slips/get-picking-slips.query';
-import { PickingSlipResponse } from 'src/types/picking-slip';
 import { csvFilePipeBuilder } from 'src/utils/parse-file-pipe-builders';
 
 type Base = 'slip';
@@ -35,7 +36,7 @@ export class PickingSlipsController {
 
     @UsePipes(ZodValidationPipe)
     @Get()
-    async getAll(@Query() queryDto: QueryDto): Promise<PickingSlipResponse[]> {
+    async getAll(@Query() queryDto: QueryDto): Promise<PaginatedResponse<PickingSlipType>> {
         const results = this.queryBus.execute(
             new GetPickingSlipsQuery(
                 queryDto.status,

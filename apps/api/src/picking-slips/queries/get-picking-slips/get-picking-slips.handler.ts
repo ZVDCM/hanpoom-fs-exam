@@ -1,11 +1,13 @@
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { PaginatedResponse, PickingSlip, PickingSlipStatus } from '@repo/types';
 import { and, asc, desc, eq, SQL, sql } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DATABASE_CONNECTION } from 'src/database/database.module';
 import { GetPickingSlipsQuery } from 'src/picking-slips/queries/get-picking-slips/get-picking-slips.query';
 import * as schema from 'src/picking-slips/schema';
-import { PickingSlipResponse, PickingSlipStatus } from 'src/types/picking-slip';
+import { checkForErrors } from 'src/utils/check-for-errors';
+import { getValues } from 'src/utils/get-values';
 
 @QueryHandler(GetPickingSlipsQuery)
 export class GetPickingSlipsHandler implements IQueryHandler<GetPickingSlipsQuery> {
@@ -18,7 +20,7 @@ export class GetPickingSlipsHandler implements IQueryHandler<GetPickingSlipsQuer
         status,
         page,
         pageSize,
-    }: GetPickingSlipsQuery): Promise<PickingSlipResponse[]> {
+    }: GetPickingSlipsQuery): Promise<PaginatedResponse<PickingSlip>> {
         const pickingSlipItems = this.database.$with('pickingSlipItems').as(
             this.database
                 .select({
@@ -33,9 +35,9 @@ export class GetPickingSlipsHandler implements IQueryHandler<GetPickingSlipsQuer
 
         const statusColumn = sql`
                 CASE
-                    WHEN printed_at IS NOT NULL
+                    WHEN ${schema.pickingSlipDates.printedAt} IS NOT NULL
                         THEN 'printed'
-                    WHEN held_at IS NOT NULL
+                    WHEN ${schema.pickingSlipDates.heldAt} IS NOT NULL
                         THEN 'held'
                     ELSE 'not_printed'
                 END
@@ -60,31 +62,53 @@ export class GetPickingSlipsHandler implements IQueryHandler<GetPickingSlipsQuer
                 ? asc(schema.pickingSlips.createdAt)
                 : desc(schema.pickingSlips.createdAt);
 
+        const baseQuery = this.database.$with('pickingSlips').as(
+            this.database
+                .with(pickingSlipItems, pickingSlipDates)
+                .select({
+                    pickingSlipId: schema.pickingSlips.id,
+                    orderId: schema.pickingSlips.orderId,
+                    pickingSlipStatus: pickingSlipDates.pickingSlipStatus,
+                    hasPreOrderItem: pickingSlipItems.hasPreOrderItem,
+                })
+                .from(schema.pickingSlips)
+                .leftJoin(
+                    pickingSlipItems,
+                    eq(schema.pickingSlips.id, pickingSlipItems.pickingSlipId),
+                )
+                .leftJoin(
+                    pickingSlipDates,
+                    eq(schema.pickingSlips.id, pickingSlipDates.pickingSlipId),
+                )
+                .where(and(...conditions))
+                .orderBy(order),
+        );
+
         const offset = Math.max(0, page - 1) * pageSize;
 
-        const pickingSlips = await this.database
-            .with(pickingSlipItems, pickingSlipDates)
-            .select({
-                pickingSlipId: schema.pickingSlips.id,
-                orderId: schema.pickingSlips.orderId,
-                pickingSlipStatus: pickingSlipDates.pickingSlipStatus,
-                hasPreOrderItem: pickingSlipItems.hasPreOrderItem,
-            })
-            .from(schema.pickingSlips)
-            .leftJoin(pickingSlipItems, eq(schema.pickingSlips.id, pickingSlipItems.pickingSlipId))
-            .leftJoin(pickingSlipDates, eq(schema.pickingSlips.id, pickingSlipDates.pickingSlipId))
-            .where(and(...conditions))
-            .orderBy(order)
-            .limit(pageSize)
-            .offset(offset);
+        const results = await Promise.allSettled([
+            this.database.$count(this.database.with(baseQuery).select().from(baseQuery)),
+            this.database.with(baseQuery).select().from(baseQuery).limit(pageSize).offset(offset),
+        ]);
 
-        return pickingSlips.map(
+        checkForErrors(results);
+
+        const [count, pickingSlips] = getValues(results) as [number, PickingSlip[]];
+
+        const data = pickingSlips.map(
             (pickingSlip) =>
                 ({
                     ...pickingSlip,
                     pickingSlipStatus: pickingSlip.pickingSlipStatus as PickingSlipStatus,
                     hasPreOrderItem: pickingSlip.hasPreOrderItem as boolean,
-                }) as const satisfies PickingSlipResponse,
+                }) as const satisfies PickingSlip,
         );
+
+        return {
+            data,
+            total: count,
+            page,
+            pageSize,
+        };
     }
 }

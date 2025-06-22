@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { customType } from 'drizzle-orm/pg-core';
 import { pgTable, varchar, timestamp, bigint } from 'drizzle-orm/pg-core';
+import { PickingSlipId, PickingSlipDateId, PickingSlipItemId } from '@repo/types';
 
 const intBool = customType<{ data: number; notNull: true; default: true }>({
     dataType() {
@@ -12,10 +13,6 @@ const smallintUnsigned = customType<{ data: number; notNull: true; default: true
         return 'smallint_unsigned';
     },
 });
-
-export type PickingSlipId = number & { __brand: 'picking_slip_id' };
-export type PickingSlipItemId = number & { __brand: 'picking_slip_item_id' };
-export type PickingSlipDateId = number & { __brand: 'picking_slip_date_id' };
 
 export const pickingSlips = pgTable('picking_slips', {
     id: bigint('id', { mode: 'number' })
