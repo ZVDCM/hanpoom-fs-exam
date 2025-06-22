@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
+import TanstackQueryClientProvider from '@/components/providers/tanstack-query-client-provider';
+import { Toaster } from 'sonner';
 
 const geistSans = localFont({
     src: './fonts/GeistVF.woff',
@@ -18,12 +20,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
     children,
+    auth,
+    home,
 }: Readonly<{
     children: React.ReactNode;
+    auth: React.ReactNode;
+    home: React.ReactNode;
 }>) {
     return (
         <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+                <TanstackQueryClientProvider>
+                    {children}
+                    {auth}
+                    {home}
+                </TanstackQueryClientProvider>
+                <Toaster />
+            </body>
         </html>
     );
 }

@@ -14,3 +14,9 @@ export const createUserSchema = z
     });
 
 export type CreateUserType = z.infer<typeof createUserSchema>;
+
+export interface AuthUser {
+    id: UserId;
+    email: string;
+    createdAt: string;
+}

@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { UserId } from './user';
 
 export type RefreshTokenId = string & { __brand: 'refresh_token_id' };
@@ -9,6 +10,11 @@ export interface TokenPayload {
 }
 
 export interface LoginResult {
+    accessToken: string;
+    refreshToken: string;
+}
+
+export interface LoginResponse {
     accessToken: string;
     refreshToken: string;
 }

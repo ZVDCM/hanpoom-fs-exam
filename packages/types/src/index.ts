@@ -4,3 +4,4 @@ export * from './user';
 export * from './query';
 export * from './utils';
 export * from './auth';
+export * from './message';
