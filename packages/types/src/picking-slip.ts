@@ -15,3 +15,10 @@ export interface PickingSlip {
     pickingSlipStatus: PickingSlipStatus;
     hasPreOrderItem: boolean;
 }
+
+export interface PickingSlipResponse {
+    picking_slip_id: PickingSlipId;
+    order_id: number;
+    picking_slip_status: PickingSlipStatus;
+    has_pre_order_item: boolean;
+}

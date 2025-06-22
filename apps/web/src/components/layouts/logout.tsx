@@ -25,7 +25,7 @@ export default function Logout() {
     });
 
     return (
-        <Button variant="ghost" onClick={() => logout()} className="fixed top-8 right-8">
+        <Button variant="ghost" onClick={() => logout()} className="fixed top-5 right-8">
             Log out
         </Button>
     );
