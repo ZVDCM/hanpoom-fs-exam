@@ -17,6 +17,11 @@ async function bootstrap() {
 
     app.useGlobalInterceptors(new SnakeCaseInterceptor());
 
+    app.enableCors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true,
+    });
+
     await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();
