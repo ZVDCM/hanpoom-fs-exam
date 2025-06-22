@@ -18,13 +18,13 @@ export class ImportCSVHandler<TEntity> implements ICommandHandler<ImportCSVComma
     async execute({ results, EntityType }: ImportCSVCommand<TEntity>) {
         switch (EntityType) {
             case PickingSlip:
-                this.pickingSlips.import(results as PickingSlip[]);
+                await this.pickingSlips.import(results as PickingSlip[]);
                 break;
             case PickingSlipDate:
-                this.pickingSlipDates.import(results as PickingSlipDate[]);
+                await this.pickingSlipDates.import(results as PickingSlipDate[]);
                 break;
             case PickingSlipItem:
-                this.pickingSlipItems.import(results as PickingSlipItem[]);
+                await this.pickingSlipItems.import(results as PickingSlipItem[]);
                 break;
             default:
                 throw new Error(`Unknown entity type: ${EntityType.name}`);

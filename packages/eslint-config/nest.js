@@ -20,6 +20,10 @@ export const nestJsConfig = [
                 ...globals.node,
                 ...globals.jest,
             },
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
         },
     },
     {

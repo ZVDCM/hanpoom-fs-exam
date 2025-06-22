@@ -72,13 +72,13 @@ export class PickingSlipsController {
 
         switch (variant) {
             case 'slips':
-                this.commandBus.execute(new ImportCSVCommand(results, PickingSlip));
+                await this.commandBus.execute(new ImportCSVCommand(results, PickingSlip));
                 break;
             case 'slip-dates':
-                this.commandBus.execute(new ImportCSVCommand(results, PickingSlipDate));
+                await this.commandBus.execute(new ImportCSVCommand(results, PickingSlipDate));
                 break;
             case 'slip-items':
-                this.commandBus.execute(new ImportCSVCommand(results, PickingSlipItem));
+                await this.commandBus.execute(new ImportCSVCommand(results, PickingSlipItem));
                 break;
             default:
                 throw new Error(`Unknown variant: ${variant}`);

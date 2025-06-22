@@ -1,6 +1,6 @@
 import { relations } from 'drizzle-orm';
 import { customType } from 'drizzle-orm/pg-core';
-import { pgTable, varchar, timestamp, bigint, smallint } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, timestamp, bigint } from 'drizzle-orm/pg-core';
 
 const intBool = customType<{ data: number; notNull: true; default: true }>({
     dataType() {
