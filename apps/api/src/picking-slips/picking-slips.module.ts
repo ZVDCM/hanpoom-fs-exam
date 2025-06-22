@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from 'src/database/database.module';
-import { CqrsModule } from '@nestjs/cqrs';
 import { PickingSlipsController } from './picking-slips.controller';
 import { PickingSlipsRepository } from 'src/picking-slips/repositories/picking-slips.repository';
 import { ParseCSVHandler } from 'src/picking-slips/commands/parse-csv/parse-csv.handler';
@@ -10,7 +9,7 @@ import { PickingSlipItemsRepository } from 'src/picking-slips/repositories/picki
 import { GetPickingSlipsHandler } from 'src/picking-slips/queries/get-picking-slips/get-picking-slips.handler';
 
 @Module({
-    imports: [DatabaseModule, CqrsModule],
+    imports: [DatabaseModule],
     controllers: [PickingSlipsController],
     providers: [
         PickingSlipsRepository,
