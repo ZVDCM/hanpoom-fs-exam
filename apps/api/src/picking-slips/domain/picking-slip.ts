@@ -1,8 +1,9 @@
 import { AggregateRoot } from '@nestjs/cqrs';
+import { PickingSlipId } from '@repo/types';
 
 export class PickingSlip extends AggregateRoot {
     constructor(
-        private readonly _id: number,
+        private readonly _id: PickingSlipId,
         private readonly _orderId: number,
         private readonly _orderFulfillmentOrderId: number,
         private readonly _isContainedSingleProduct: boolean,
