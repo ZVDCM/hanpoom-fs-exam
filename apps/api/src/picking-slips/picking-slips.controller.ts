@@ -1,17 +1,7 @@
-import {
-    Controller,
-    Get,
-    Param,
-    Post,
-    Query,
-    UploadedFile,
-    UseInterceptors,
-    UsePipes,
-} from '@nestjs/common';
+import { Controller, Get, Param, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PaginatedResponse } from '@repo/types';
-import { ZodValidationPipe } from 'nestjs-zod';
 import { ImportCSVCommand } from 'src/picking-slips/commands/import-csv/import-csv.command';
 import { ParseCSVCommand } from 'src/picking-slips/commands/parse-csv/parse-csv.command';
 import { PickingSlip } from 'src/picking-slips/domain/picking-slip';
@@ -34,7 +24,6 @@ export class PickingSlipsController {
         private readonly queryBus: QueryBus,
     ) {}
 
-    @UsePipes(ZodValidationPipe)
     @Get()
     async getAll(@Query() queryDto: QueryDto): Promise<PaginatedResponse<PickingSlipType>> {
         const results = this.queryBus.execute(

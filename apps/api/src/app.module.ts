@@ -7,6 +7,8 @@ import { AllExceptionsFilter } from 'src/all-exceptions.filter';
 import { SnakeCaseInterceptor } from 'src/snake-case.interceptor';
 import { AuthModule } from './auth/auth.module';
 import { CqrsModule } from '@nestjs/cqrs';
+import { APP_PIPE } from '@nestjs/core';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 @Module({
     imports: [
@@ -19,6 +21,13 @@ import { CqrsModule } from '@nestjs/cqrs';
         PickingSlipsModule,
         AuthModule,
     ],
-    providers: [AllExceptionsFilter, SnakeCaseInterceptor],
+    providers: [
+        {
+            provide: APP_PIPE,
+            useClass: ZodValidationPipe,
+        },
+        AllExceptionsFilter,
+        SnakeCaseInterceptor,
+    ],
 })
 export class AppModule {}
