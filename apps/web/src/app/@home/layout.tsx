@@ -1,5 +1,11 @@
+import Logout from '@/components/layouts/logout';
 import React from 'react';
 
 export default function PickingSlipsLayout({ children }: Readonly<React.PropsWithChildren>) {
-    return <main>{children}</main>;
+    return (
+        <main>
+            <Logout />
+            {children}
+        </main>
+    );
 }

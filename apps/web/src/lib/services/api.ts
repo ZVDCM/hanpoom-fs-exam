@@ -9,7 +9,7 @@ export const api = axios.create({
     },
 });
 
-axios.interceptors.request.use(
+api.interceptors.request.use(
     function (config) {
         const { accessToken } = userStore.getState();
         if (accessToken) {
@@ -22,7 +22,7 @@ axios.interceptors.request.use(
     },
 );
 
-axios.interceptors.response.use(
+api.interceptors.response.use(
     function (response) {
         return response;
     },
@@ -34,7 +34,7 @@ axios.interceptors.response.use(
 
             try {
                 const response = await axios.post(
-                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`,
+                    `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
                     null,
                     {
                         withCredentials: true,

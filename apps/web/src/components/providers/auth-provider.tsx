@@ -2,9 +2,9 @@
 
 import { api } from '@/lib/services/api';
 import { userStore } from '@/lib/stores/user-store';
-import { LoginResponse } from '@repo/types';
+import { ErrorMessage, LoginResponse } from '@repo/types';
 import { useQuery } from '@tanstack/react-query';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import React from 'react';
 
 interface AuthProviderProps {
@@ -19,9 +19,14 @@ export default function AuthProvider({
 }: Readonly<React.PropsWithChildren<AuthProviderProps>>) {
     const { accessToken, setCredentials } = userStore();
 
-    const { data, isFetching } = useQuery<AxiosResponse<LoginResponse>>({
+    const { data, isFetching, error } = useQuery<
+        void,
+        AxiosError<ErrorMessage>,
+        AxiosResponse<LoginResponse>
+    >({
         queryKey: ['auth'],
         queryFn: () => api.post('/auth/refresh'),
+        retry: false,
     });
 
     React.useEffect(() => {
@@ -29,6 +34,15 @@ export default function AuthProvider({
             setCredentials(data.data);
         }
     }, [data]);
+
+    React.useEffect(() => {
+        if (error?.status === 401) {
+            setCredentials({
+                accessToken: null,
+                user: null,
+            });
+        }
+    }, [error]);
 
     if (isFetching || accessToken === undefined) {
         return null;

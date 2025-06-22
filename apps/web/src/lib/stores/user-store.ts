@@ -4,11 +4,15 @@ import { create } from 'zustand';
 interface UserState {
     user: AuthUser | null | undefined;
     accessToken: string | null | undefined;
-    setCredentials: (data: LoginResponse) => void;
+}
+interface UserActions {
+    setCredentials: (data: UserState) => void;
 }
 
-export const userStore = create<UserState>((set) => ({
+type UserStore = UserState & UserActions;
+
+export const userStore = create<UserStore>((set) => ({
     user: undefined,
     accessToken: undefined,
-    setCredentials: (data: LoginResponse) => set({ ...data }),
+    setCredentials: (data: UserState) => set({ ...data }),
 }));

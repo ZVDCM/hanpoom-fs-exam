@@ -76,7 +76,9 @@ export default function LoginForm() {
 
     React.useEffect(() => {
         if (isSuccess) {
-            toast.success('Login Successful');
+            toast.success('Login Successful', {
+                description: 'Welcome back!',
+            });
             router.push('/');
         }
     }, [isSuccess, router]);
