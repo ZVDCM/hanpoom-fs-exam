@@ -2,12 +2,28 @@ import { AggregateRoot } from '@nestjs/cqrs';
 
 export class PickingSlip extends AggregateRoot {
     constructor(
-        public readonly id: number,
-        public readonly orderId: number,
-        public readonly orderFulfillmentOrderId: number,
-        public readonly isContainedSingleProduct: boolean,
-        public readonly createdAt: Date,
+        private readonly _id: number,
+        private readonly _orderId: number,
+        private readonly _orderFulfillmentOrderId: number,
+        private readonly _isContainedSingleProduct: boolean,
+        private readonly _createdAt: Date,
     ) {
         super();
+    }
+
+    get id() {
+        return this._id;
+    }
+    get orderId() {
+        return this._orderId;
+    }
+    get orderFulfillmentOrderId() {
+        return this._orderFulfillmentOrderId;
+    }
+    get isContainedSingleProduct() {
+        return this._isContainedSingleProduct;
+    }
+    get createdAt() {
+        return this._createdAt;
     }
 }
