@@ -20,8 +20,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/services/api';
+import { userStore } from '@/lib/stores/user-store';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AuthUser, ErrorMessage } from '@repo/types';
+import { ErrorMessage, LoginResponse } from '@repo/types';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import Link from 'next/link';
@@ -39,14 +40,17 @@ export const loginSchema = z.object({
 export type LoginType = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
+    const { setCredentials } = userStore();
+
     const router = useRouter();
 
     const { mutate, isSuccess, isPending, isError } = useMutation<
-        AxiosResponse<AuthUser>,
+        AxiosResponse<LoginResponse>,
         AxiosError<ErrorMessage>,
         LoginType
     >({
         mutationFn: (data: LoginType) => api.post('/auth/login', data),
+        onSuccess: (data) => setCredentials(data.data),
     });
 
     const form = useForm<LoginType>({

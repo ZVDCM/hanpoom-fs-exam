@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import TanstackQueryClientProvider from '@/components/providers/tanstack-query-client-provider';
 import { Toaster } from 'sonner';
+import AuthProvider from '@/components/providers/auth-provider';
 
 const geistSans = localFont({
     src: './fonts/GeistVF.woff',
@@ -31,9 +32,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable}`}>
                 <TanstackQueryClientProvider>
-                    {children}
-                    {auth}
-                    {home}
+                    <AuthProvider {...{ auth, home }}>{children}</AuthProvider>
                 </TanstackQueryClientProvider>
                 <Toaster />
             </body>

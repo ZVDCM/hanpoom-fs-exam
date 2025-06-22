@@ -73,7 +73,10 @@ export class AuthController {
             expires: new Date(Date.now() + this.configService.get('REFRESH_TOKEN_EXPIRATION_MS')),
         });
 
-        return { accessToken };
+        res.status(200).send({
+            user: user.toResponse(),
+            accessToken,
+        });
     }
 
     @Post('logout')

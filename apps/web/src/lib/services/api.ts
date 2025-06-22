@@ -1,3 +1,4 @@
+import { userStore } from '@/lib/stores/user-store';
 import axios from 'axios';
 
 export const api = axios.create({
@@ -10,9 +11,9 @@ export const api = axios.create({
 
 axios.interceptors.request.use(
     function (config) {
-        const token = 123;
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        const { accessToken } = userStore.getState();
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`;
         }
         return config;
     },
@@ -32,9 +33,15 @@ axios.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`, null, {
-                    withCredentials: true,
-                });
+                const response = await axios.post(
+                    `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`,
+                    null,
+                    {
+                        withCredentials: true,
+                    },
+                );
+
+                userStore.getState().setCredentials(response.data);
 
                 return api(originalRequest);
             } catch (refreshError) {
