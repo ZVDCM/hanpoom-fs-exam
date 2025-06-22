@@ -1,22 +1,4 @@
 services:
-    web:
-        depends_on:
-            - api
-        image: zvdcm/hanpoom-web
-        build:
-            context: .
-            dockerfile: ./apps/web/Dockerfile
-        ports:
-            - 3000:3000
-    api:
-        depends_on:
-            - db
-        image: zvdcm/hanpoom-api
-        build:
-            context: .
-            dockerfile: ./apps/api/Dockerfile
-        ports:
-            - 3001:3001
     db:
         image: postgres
         restart: always
