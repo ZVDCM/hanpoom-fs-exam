@@ -86,13 +86,13 @@ export default function LoginForm() {
     return (
         <Card className="w-full max-w-sm">
             <CardHeader>
-                <CardTitle>Create your account</CardTitle>
-                <CardDescription>
-                    Enter your credentials below to create your account
-                </CardDescription>
+                <CardTitle>Login to your account</CardTitle>
+                <CardDescription>Enter your email below to login to your account</CardDescription>
                 <CardAction>
-                    <Link href="/" passHref>
-                        <Button variant="link">Login</Button>
+                    <Link href="/sign-up" passHref>
+                        <Button type="button" variant="link">
+                            Sign up
+                        </Button>
                     </Link>
                 </CardAction>
             </CardHeader>

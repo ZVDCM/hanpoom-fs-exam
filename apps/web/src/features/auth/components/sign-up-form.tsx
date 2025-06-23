@@ -70,9 +70,11 @@ export default function SignUpForm() {
     };
 
     React.useEffect(() => {
-        toast.error('Create Unsuccessful', {
-            description: error?.response?.data.message,
-        });
+        if (error) {
+            toast.error('Create Unsuccessful', {
+                description: error?.response?.data.message,
+            });
+        }
     }, [error]);
 
     React.useEffect(() => {

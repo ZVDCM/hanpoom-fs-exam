@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { api } from '@/lib/services/api';
 import { userStore } from '@/lib/stores/user-store';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'sonner';
 
 export default function Logout() {
+    const router = useRouter();
     const { setCredentials } = userStore();
 
     const { mutate: logout } = useMutation({
@@ -21,6 +23,8 @@ export default function Logout() {
             toast('Log out Successful', {
                 description: 'See you again',
             });
+
+            router.push('/');
         },
     });
 
