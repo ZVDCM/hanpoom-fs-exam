@@ -1,4 +1,4 @@
-import { AuthUser, LoginResponse } from '@repo/types';
+import { AuthUser } from '@repo/types';
 import { create } from 'zustand';
 
 interface UserState {
